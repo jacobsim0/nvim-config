@@ -5,6 +5,7 @@
 > Forgot a keymap? Press `Space` and **pause** — which-key pops up everything
 > available from there. `Space ?` shows buffer-local maps.
 > `Space c h` opens this cheat sheet in a side split from anywhere.
+> Close it with `q`, `Esc`, or `Space c h` again.
 
 ## Finding files (Telescope)
 
@@ -27,6 +28,25 @@ Inside the Telescope picker: type to filter, `Ctrl-n`/`Ctrl-p` (or arrows) to mo
 
 Inside the tree: `Enter` open, `a` new file, `A` new directory, `d` delete,
 `r` rename, `x` cut, `y` copy, `p` paste, `H` toggle hidden files, `?` show all mappings.
+
+## Resizing windows (tree, code, terminal)
+
+First put the cursor in the window you want to resize (`Ctrl-w h/j/k/l` or click it).
+
+| Keys | Action |
+|---|---|
+| **Hold** `Shift+Right` / `Shift+Left` | Wider / narrower, keeps going while held |
+| **Hold** `Shift+Up` / `Shift+Down` | Taller / shorter, keeps going while held |
+| `Space .` | Wider (+5 columns) |
+| `Space ,` | Narrower (-5 columns) |
+| `Space =` | Taller (+3 lines) |
+| `Space -` | Shorter (-3 lines) |
+| `Space 0` | Reset: make all windows equal size |
+| `Ctrl-w \|` | Maximize this window's width |
+| `Ctrl-w _` | Maximize this window's height |
+
+`Space .` etc. can be pressed repeatedly. The file tree defaults to 30 columns
+(`width = 30` in `lua/plugins/neo-tree.lua`) if you want a permanent change.
 
 ## Terminal (custom keymaps)
 
@@ -63,14 +83,16 @@ These are Neovim 0.11 built-in defaults — active whenever an LSP is attached:
 | `Ctrl-w d` | Show diagnostic detail in a float |
 | `:Mason` | Manage installed language servers |
 
-## Treesitter incremental selection
+## Treesitter
 
-| Keys | Action |
+Syntax highlighting and indentation are on automatically for every language in
+`lua/plugins/treesitter.lua`. Missing parsers install themselves on first open.
+
+| Command | Action |
 |---|---|
-| `g n n` | Start selection at cursor node |
-| `g r n` (visual) | Expand selection to next node |
-| `g r c` (visual) | Expand to scope |
-| `g r m` (visual) | Shrink selection |
+| `:TSInstall <lang>` | Install a parser by hand |
+| `:TSUpdate` | Update all parsers |
+| `:checkhealth nvim-treesitter` | Diagnose treesitter problems |
 
 ## Git (gitsigns)
 

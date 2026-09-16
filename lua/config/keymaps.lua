@@ -1,7 +1,19 @@
 -- Open the cheat sheet in a side split (path derived from config dir, so it works on any machine)
+-- Space c h toggles it; inside the sheet, `q` or Esc closes it.
+local cheat_path = vim.fn.stdpath("config") .. "/CHEATSHEET.md"
 vim.keymap.set("n", "<leader>ch", function()
-  vim.cmd("vsplit " .. vim.fn.stdpath("config") .. "/CHEATSHEET.md")
-end, { desc = "Open cheat sheet" })
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    if vim.api.nvim_buf_get_name(vim.api.nvim_win_get_buf(win)) == cheat_path then
+      vim.api.nvim_win_close(win, false)
+      return
+    end
+  end
+  vim.cmd("vsplit " .. cheat_path)
+  vim.bo.buflisted = false
+  local close = function() vim.cmd("close") end
+  vim.keymap.set("n", "q", close, { buffer = true, desc = "Close cheat sheet" })
+  vim.keymap.set("n", "<Esc>", close, { buffer = true, desc = "Close cheat sheet" })
+end, { desc = "Toggle cheat sheet" })
 
 -- Toggle terminal (opens at bottom, 12 lines)
 vim.keymap.set("n", "<leader>`", function()
@@ -31,7 +43,21 @@ vim.keymap.set("n", "<C-j>", "<C-w>j", { desc = "Jump to pane below" })
 -- Resize splits
 vim.keymap.set("n", "<leader>=", ":resize +3<CR>", { desc = "Increase height" })
 vim.keymap.set("n", "<leader>-", ":resize -3<CR>", { desc = "Decrease height" })
+vim.keymap.set("n", "<leader>.", ":vertical resize +5<CR>", { desc = "Increase width" })
+vim.keymap.set("n", "<leader>,", ":vertical resize -5<CR>", { desc = "Decrease width" })
+vim.keymap.set("n", "<leader>0", "<C-w>=", { desc = "Equalize all splits" })
 
 -- Resize while in terminal mode
 vim.keymap.set("t", "<leader>=", "<C-\\><C-n>:resize +3<CR>i", { desc = "Increase height" })
 vim.keymap.set("t", "<leader>-", "<C-\\><C-n>:resize -3<CR>i", { desc = "Decrease height" })
+
+-- Hold-to-resize: Shift+arrows auto-repeat while held (Alt+arrows too, if the terminal sends them)
+for _, mods in ipairs({ "S", "A" }) do
+  local n = { ["Right"] = ":vertical resize +2<CR>", ["Left"] = ":vertical resize -2<CR>",
+              ["Up"] = ":resize +1<CR>",             ["Down"] = ":resize -1<CR>" }
+  for key, cmd in pairs(n) do
+    local lhs = "<" .. mods .. "-" .. key .. ">"
+    vim.keymap.set("n", lhs, cmd, { silent = true, desc = "Resize (" .. key .. ")" })
+    vim.keymap.set("t", lhs, "<C-\\><C-n>" .. cmd .. "i", { silent = true, desc = "Resize (" .. key .. ")" })
+  end
+end

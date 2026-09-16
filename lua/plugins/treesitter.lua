@@ -1,41 +1,44 @@
 return {
   {
     "nvim-treesitter/nvim-treesitter",
-    branch = "master", -- the repo is moving to main eventually
-    build = ":TSUpdate", -- auto update parsers on install/update
+    branch = "main", -- master is archived and breaks on Neovim 0.12+
+    build = ":TSUpdate",
     lazy = false, -- load at startup
     config = function()
-      require("nvim-treesitter.configs").setup({
-        -- parsers to ensure are installed
-        ensure_installed = {
-          "lua", "vim", "vimdoc", "query",
-          "markdown", "markdown_inline",
-          "python", "javascript", "typescript", "html", "css",
-          "go", "gomod", "terraform", "hcl",
-          "yaml", "json", "bash", "dockerfile",
-        },
+      local ts = require("nvim-treesitter")
+      ts.setup({})
 
-        sync_install = false,   -- install asynchronously
-        auto_install = true,    -- auto install missing parsers when entering buffer
+      -- parsers to ensure are installed (needs `tree-sitter` CLI + C compiler)
+      local parsers = {
+        "lua", "vim", "vimdoc", "query",
+        "markdown", "markdown_inline",
+        "python", "javascript", "typescript", "html", "css",
+        "go", "gomod", "terraform", "hcl",
+        "yaml", "json", "bash", "dockerfile",
+      }
+      ts.install(parsers)
 
-        highlight = {
-          enable = true,
-          additional_vim_regex_highlighting = false,
-        },
-
-        indent = {
-          enable = true,
-        },
-
-        incremental_selection = {
-          enable = true,
-          keymaps = {
-            init_selection = "gnn",
-            node_incremental = "grn",
-            scope_incremental = "grc",
-            node_decremental = "grm",
-          },
-        },
+      -- highlight + indent: main branch has no modules; enable per buffer
+      vim.api.nvim_create_autocmd("FileType", {
+        group = vim.api.nvim_create_augroup("treesitter_enable", { clear = true }),
+        callback = function(ev)
+          local lang = vim.treesitter.language.get_lang(ev.match)
+          if not lang then return end
+          -- skip plugin UI buffers (neo-tree, telescope, lazy, ...) and unknown languages
+          if vim.bo[ev.buf].buftype ~= "" then return end
+          if not vim.list_contains(ts.get_available(), lang) then return end
+          -- auto-install missing parsers when entering a buffer
+          if not vim.treesitter.language.add(lang) then
+            ts.install({ lang }):await(function()
+              if vim.api.nvim_buf_is_valid(ev.buf) then
+                pcall(vim.treesitter.start, ev.buf, lang)
+              end
+            end)
+            return
+          end
+          pcall(vim.treesitter.start, ev.buf, lang)
+          vim.bo[ev.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end,
       })
     end,
   },
