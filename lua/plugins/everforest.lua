@@ -7,7 +7,7 @@ return {
       require("everforest").setup({
         background = "medium", -- "soft", "medium", "hard"
       })
-      vim.cmd.colorscheme("everforest")
+      -- default theme is chosen in lua/config/theme.lua (Space f t to change and save)
     end,
   },
 }

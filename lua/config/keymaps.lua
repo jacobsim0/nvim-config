@@ -47,9 +47,6 @@ vim.keymap.set("n", "<leader>.", ":vertical resize +5<CR>", { desc = "Increase w
 vim.keymap.set("n", "<leader>,", ":vertical resize -5<CR>", { desc = "Decrease width" })
 vim.keymap.set("n", "<leader>0", "<C-w>=", { desc = "Equalize all splits" })
 
--- Resize while in terminal mode
-vim.keymap.set("t", "<leader>=", "<C-\\><C-n>:resize +3<CR>i", { desc = "Increase height" })
-vim.keymap.set("t", "<leader>-", "<C-\\><C-n>:resize -3<CR>i", { desc = "Decrease height" })
 
 -- Hold-to-resize: Shift+arrows auto-repeat while held (Alt+arrows too, if the terminal sends them)
 for _, mods in ipairs({ "S", "A" }) do

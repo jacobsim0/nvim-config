@@ -15,9 +15,23 @@
 | `Space f g` | Live grep (search file *contents*) |
 | `Space f b` | List open buffers |
 | `Space f h` | Search help docs |
+| `Space f t` | Pick a color theme: arrow keys preview live, `Enter` saves it for next time |
 
 Inside the Telescope picker: type to filter, `Ctrl-n`/`Ctrl-p` (or arrows) to move,
 `Enter` to open, `Ctrl-v` open in vertical split, `Ctrl-x` horizontal split, `Esc` `Esc` to close.
+
+## Open files as tabs (bufferline)
+
+Every open file shows as a tab across the top. Opening a file never closes the
+previous one; it just adds a tab.
+
+| Keys | Action |
+|---|---|
+| `Shift-l` / `Shift-h` | Next / previous tab |
+| `Space b d` | Close the current tab (refuses if unsaved; `:w` first) |
+| `Space b o` | Close every tab except the current one |
+| `Space b p` | Pick a tab: letters appear on each tab, press one to jump |
+| Mouse click | Click a tab to switch, click its `x` to close |
 
 ## File tree (Neo-tree)
 
@@ -56,7 +70,7 @@ First put the cursor in the window you want to resize (`Ctrl-w h/j/k/l` or click
 | `Esc` (in terminal) | Exit terminal-insert mode |
 | `Ctrl-k` (in terminal) | Jump up to the code pane |
 | `Ctrl-j` (in code) | Jump down to the terminal pane |
-| `Space =` / `Space -` | Grow / shrink the split (works in terminal too) |
+| Hold `Shift+Up` / `Shift+Down` (in terminal) | Grow / shrink the split. `Space =` / `Space -` are normal-mode only so spaces reach the shell |
 
 ## Completion (nvim-cmp, insert mode)
 

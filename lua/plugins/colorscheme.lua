@@ -2,7 +2,8 @@ return {
   {
     "catppuccin/nvim",
     name = "catppuccin",
-    lazy = false, -- kept installed (and visible in :Telescope colorscheme) but no longer the default
+    lazy = false,
+    priority = 1000, -- load early so it can be the saved default (see lua/config/theme.lua)
     config = function()
       require("catppuccin").setup({
         flavour = "mocha", -- latte, frappe, macchiato, mocha

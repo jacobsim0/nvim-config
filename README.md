@@ -13,7 +13,7 @@ See **[CHEATSHEET.md](CHEATSHEET.md)** for all keymaps (or press `Space c h` ins
 - **LSP**: mason-managed servers — gopls, pyright, terraformls, bashls
 - **Formatting**: conform format-on-save — terraform fmt, gofmt, ruff, prettier
 - **Git**: gitsigns (gutter markers, hunk staging, blame)
-- **UI**: lualine statusline, which-key (press `Space` and pause to discover keymaps)
+- **UI**: bufferline (open files as tabs), lualine statusline, which-key (press `Space` and pause to discover keymaps)
 
 ## Install
 
